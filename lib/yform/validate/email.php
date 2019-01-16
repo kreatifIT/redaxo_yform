@@ -11,23 +11,21 @@ class rex_yform_validate_email extends rex_yform_validate_abstract
 {
     public function enterObject()
     {
-        if ($this->params['send'] == '1') {
-            $Object = $this->getValueObject();
+        $Object = $this->getValueObject();
 
-            if (!$this->isObject($Object)) {
-                return;
-            }
+        if (!$this->isObject($Object)) {
+            return;
+        }
 
-            if ($Object->getValue() == '') {
-                return;
-            }
+        if ($Object->getValue() == '') {
+            return;
+        }
 
-            if ($Object->getValue()) {
-                // https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
-                if (!filter_var($Object->getValue(), FILTER_VALIDATE_EMAIL)) {
-                    $this->params['warning'][$Object->getId()] = $this->params['error_class'];
-                    $this->params['warning_messages'][$Object->getId()] = $this->getElement('message');
-                }
+        if ($Object->getValue()) {
+            // https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
+            if (!filter_var($Object->getValue(), FILTER_VALIDATE_EMAIL)) {
+                $this->params['warning'][$Object->getId()] = $this->params['error_class'];
+                $this->params['warning_messages'][$Object->getId()] = $this->getElement('message');
             }
         }
     }
@@ -48,5 +46,10 @@ class rex_yform_validate_email extends rex_yform_validate_abstract
             ],
             'description' => rex_i18n::msg('yform_validate_email_description'),
         ];
+    }
+
+    public function isDeprecated()
+    {
+        return true;
     }
 }
