@@ -31,7 +31,7 @@ class rex_yform_value_ip extends rex_yform_value_abstract
         return 'ip|name|[no_db]|[server_var]';
     }
 
-    public function getDefinitions()
+    public function getDefinitions($values = [])
     {
         return [
             'type' => 'value',
