@@ -60,7 +60,7 @@ class rex_yform_value_checkbox_sql extends rex_yform_value_abstract
         return 'checkbox_sql|name|label:|select id,name from table order by name|';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -72,8 +72,7 @@ class rex_yform_value_checkbox_sql extends rex_yform_value_abstract
                 'notice' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_checkbox_sql_description'),
-            'db_type' => ['text'],
-            'deprecated' => rex_i18n::msg('yform_values_deprecated_checkbox_sql'),
+            'dbtype' => 'text',
         ];
     }
 
@@ -121,10 +120,4 @@ class rex_yform_value_checkbox_sql extends rex_yform_value_abstract
 
         return implode('<br />', $return);
     }
-
-    public function isDeprecated()
-    {
-        return true;
-    }
-
 }

@@ -20,7 +20,7 @@ if ($this->getElement('multiple') == 1) {
     $widget = rex_var_media::getWidget($buttonId, $name, $value, $widget_params);
 }
 
-$class_group = trim('form-group ' . $this->getHTMLClass() . ' ' . $this->getWarningClass());
+$class_group = trim('form-group yform-element ' . $this->getHTMLClass() . ' ' . $this->getWarningClass());
 
 $notice = [];
 if ($this->getElement('notice') != '') {
@@ -36,7 +36,7 @@ if (count($notice) > 0) {
 }
 
 ?>
-<div data-be-media-wrapper="<?php echo $this->getFieldName(); ?>" class="<?php echo $class_group ?>" id="<?php echo $this->getHTMLId() ?>">
+<div class="<?php echo $class_group ?>" id="<?php echo $this->getHTMLId() ?>">
     <label class="control-label" for="<?php echo $this->getFieldId() ?>"><?php echo $this->getLabel() ?></label>
     <?php echo $widget; ?>
     <?php echo $notice ?>

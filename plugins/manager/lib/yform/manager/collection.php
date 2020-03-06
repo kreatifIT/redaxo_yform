@@ -257,7 +257,7 @@ class rex_yform_manager_collection extends \SplFixedArray
             $relatedDatasets[$dataset->getId()] = [];
         }
 
-        if (4 == $relation['type'] || 5 == $relation['type']) {
+        if (4 == $relation['type']) {
             $query->where($relation['field'], $this->getIds());
 
             $allRelatedDatasets = $query->find();
@@ -369,7 +369,7 @@ class rex_yform_manager_collection extends \SplFixedArray
         $yform->setDebug(self::$debug);
         $yform->objparams['form_class'] .= ' yform-manager-multi-edit';
 
-        $send = $yform->getFieldValue('send');
+        $send = $yform->getFieldValue('send', '', 'send');
 
         $i = 0;
         $validations = [];
@@ -427,17 +427,18 @@ class rex_yform_manager_collection extends \SplFixedArray
             $default = 0;
             if (!$send || !$enabled) {
                 if ($this->isValueUnique($key)) {
-                    $yform->setFieldValue($i, [], $this->getUniqueValue($key));
+                    $yform->setFieldValue($i, $this->getUniqueValue($key));
                     $default = 1;
                 }
             }
 
             if ($useCheckbox) {
                 $yform->setValueField('checkbox', [
-                    'name' => $key.'_multi_edit',
-                    'label' => rex_i18n::msg('yform_manager_multi_edit_field', $field->getLabel()),
-                    'default' => $default,
-                    'no_db' => 'no_db',
+                    $key.'_multi_edit',
+                    rex_i18n::msg('yform_manager_multi_edit_field', $field->getLabel()),
+                    '0,1',
+                    $default,
+                    'no_db',
                     'attributes' => ['data-multi-edit-checkbox' => 'true'],
                     '__multi_edit_checkbox' => $key,
                 ]);

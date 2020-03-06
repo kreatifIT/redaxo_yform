@@ -28,10 +28,10 @@ class rex_yform_value_html extends rex_yform_value_abstract
 
     public function getDescription()
     {
-        return htmlspecialchars('html|name|label|<div class="block"></div>');
+        return htmlspecialchars('html|name|<div class="block"></div>');
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -42,7 +42,7 @@ class rex_yform_value_html extends rex_yform_value_abstract
                 'html' => ['type' => 'textarea',    'label' => rex_i18n::msg('yform_values_html_HTML')],
             ],
             'description' => rex_i18n::msg('yform_values_html_description'),
-            'db_type' => ['none'],
+            'dbtype' => 'none',
             'multi_edit' => 'always',
             'is_searchable' => false,
             'is_hiddeninlist' => true,

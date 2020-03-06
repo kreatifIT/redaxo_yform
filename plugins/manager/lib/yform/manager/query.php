@@ -187,7 +187,7 @@ class rex_yform_manager_query implements IteratorAggregate, Countable
 
         $relatedTable = $alias ?: $relation['table'];
 
-        if (4 == $relation['type'] || 5 == $relation['type']) {
+        if (4 == $relation['type']) {
             return $this->join($relation['table'], $alias, $this->getTableAlias().'.id', $relatedTable.'.'.$relation['field']);
         }
 
@@ -606,17 +606,6 @@ class rex_yform_manager_query implements IteratorAggregate, Countable
     public function find()
     {
         return rex_yform_manager_dataset::queryCollection($this->getQuery(), $this->getParams(), $this->table);
-    }
-
-    public function fetchColumn($column = 'id')
-    {
-        $result = [];
-        $collection = $this->find();
-
-        foreach ($collection as $item) {
-            $result[] = $item->getValue($column);
-        }
-        return $result;
     }
 
     /**

@@ -1,5 +1,9 @@
 package: yform/tools
-version: '3.0-dev'
+version: '2.3'
 author: 'Jan Kristinus'
 supportpage: 'https://github.com/yakamara/redaxo_yform/issues'
 compile: 0
+
+requires:
+    packages:
+        yform/manager: '^2.0'

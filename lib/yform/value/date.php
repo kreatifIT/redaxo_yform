@@ -9,9 +9,7 @@
 
 class rex_yform_value_date extends rex_yform_value_abstract
 {
-    const
-        VALUE_DATE_DEFAULT = 'YYYY-MM-DD',
-        VALUE_DATE_FORMATS = ['YYYY-MM-DD' => 'YYYY-MM-DD', 'DD-MM-YYYY' => 'DD-MM-YYYY','MM-DD-YYYY' => 'MM-DD-YYYY'];
+    const VALUE_DATE_DEFAULT = 'YYYY/MM/DD';
 
     public function preValidateAction()
     {
@@ -167,10 +165,10 @@ class rex_yform_value_date extends rex_yform_value_abstract
 
     public function getDescription()
     {
-        return 'date|name|label| jahrstart | [jahrende/+5 ]| [Anzeigeformat YYYY-MM-DD] | [1/Aktuelles Datum voreingestellt] | [no_db] ';
+        return 'date|name|label| jahrstart | [jahrsende/+5 ]| [Anzeigeformat YYYY/MM/DD] | [1/Aktuelles Datum voreingestellt] | [no_db] ';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -180,15 +178,15 @@ class rex_yform_value_date extends rex_yform_value_abstract
                 'label' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_defaults_label')],
                 'year_start' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_date_year_start')],
                 'year_end' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_date_year_end')],
-                'format' => ['type' => 'choice', 'label' => rex_i18n::msg('yform_values_date_format'), 'choices' => self::VALUE_DATE_FORMATS, 'default' => self::VALUE_DATE_DEFAULT],
+                'format' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_date_format'), 'notice' => rex_i18n::msg('yform_values_date_format_notice')],
                 'current_date' => ['type' => 'boolean', 'label' => rex_i18n::msg('yform_values_date_current_date')],
                 'no_db' => ['type' => 'no_db',   'label' => rex_i18n::msg('yform_values_defaults_table')],
-                'widget' => ['type' => 'choice', 'label' => rex_i18n::msg('yform_values_defaults_widgets'), 'choices' => ['select' => 'select', 'input:text' => 'input:text'], 'default' => 'select'],
+                'widget' => ['type' => 'select', 'label' => rex_i18n::msg('yform_values_defaults_widgets'), 'options' => ['select' => 'select', 'input:text' => 'input:text'], 'default' => 'select'],
                 'attributes' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_attributes'), 'notice' => rex_i18n::msg('yform_values_defaults_attributes_notice')],
                 'notice' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_date_description'),
-            'db_type' => ['date'],
+            'dbtype' => 'date',
             'famous' => true,
         ];
     }
@@ -196,12 +194,15 @@ class rex_yform_value_date extends rex_yform_value_abstract
     public static function getListValue($params)
     {
         $format = '';
+
         if (isset($params['params']['field']['format'])) {
             $format = $params['params']['field']['format'];
         }
+
         if ($format == '') {
             $format = self::VALUE_DATE_DEFAULT;
         }
+
         return self::date_convertIsoDateToFormat($params['subject'], $format);
     }
 

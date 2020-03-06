@@ -10,6 +10,7 @@
 echo rex_view::title(rex_i18n::msg('yform'));
 $_csrf_key = 'yform_table_edit';
 
+
 // ********************************************* TABLE ADD/EDIT/LIST
 
 $func = rex_request('func', 'string', '');
@@ -25,19 +26,19 @@ if ($func == 'tableset_import' && rex::getUser()->isAdmin()) {
     $yform->setHiddenField('func', $func);
     $yform->setObjectparams('real_field_names', true);
     $yform->setValueField('upload', [
-        'name' => 'importfile',
-        'label' => rex_i18n::msg('yform_manager_table_import_jsonimportfile'),
-        'max_size' => '1000', // max size in kb or range 100,500
-        'types' => '.json', // allowed extensions ".gif,.png"
-        'required' => 1,
-        'messages' => [
-            rex_i18n::msg('yform_manager_table_import_warning_min'),
-            rex_i18n::msg('yform_manager_table_import_warning_max'),
-            rex_i18n::msg('yform_manager_table_import_warning_type'),
-            rex_i18n::msg('yform_manager_table_import_warning_selectfile'),
-        ],
-        'modus' => 'no_save',
-        'no_db' => 'no_db',
+    'name' => 'importfile',
+    'label' => rex_i18n::msg('yform_manager_table_import_jsonimportfile'),
+    'max_size' => '1000', // max size in kb or range 100,500
+    'types' => '.json', // allowed extensions ".gif,.png"
+    'required' => 1,
+    'messages' => [
+    rex_i18n::msg('yform_manager_table_import_warning_min'),
+    rex_i18n::msg('yform_manager_table_import_warning_max'),
+    rex_i18n::msg('yform_manager_table_import_warning_type'),
+    rex_i18n::msg('yform_manager_table_import_warning_selectfile'),
+    ],
+    'modus' => 'no_save',
+    'no_db' => 'no_db',
     ]);
 
     $form = $yform->getForm();
@@ -79,15 +80,10 @@ if ($func == 'tableset_import' && rex::getUser()->isAdmin()) {
     $yform->setActionField('showtext', ['', rex_i18n::msg('yform_manager_table_entry_saved')]);
     $yform->setObjectparams('main_table', rex_yform_manager_table::table());
 
-    $yform->setValueField('html', ['html' => '<div class="row"><div class="col-md-6">']);
-
-    $yform->setValueField('html', ['html' => '<label>'.rex_i18n::msg('yform_manager_table_basic_info').'</label>']);
-
-    $yform->setValueField('checkbox', ['status', rex_i18n::msg('yform_tbl_active')]);
     $yform->setValueField('prio', ['prio', rex_i18n::msg('yform_manager_table_prio'), 'name']);
 
     if ($func == 'edit') {
-        $yform->setObjectparams('submit_btn_label', rex_i18n::msg('yform_update_table'));
+        $yform->setObjectparams('submit_btn_label', rex_i18n::msg('yform_save'));
         $yform->setValueField('showvalue', ['table_name', rex_i18n::msg('yform_manager_table_name')]);
         $yform->setHiddenField('table_id', $table_id);
         $yform->setActionField('db', [rex_yform_manager_table::table(), "id=$table_id"]);
@@ -95,7 +91,7 @@ if ($func == 'tableset_import' && rex::getUser()->isAdmin()) {
         $yform->setObjectparams('main_where', "id=$table_id");
         $yform->setObjectparams('getdata', true);
     } elseif ($func == 'add') {
-        $yform->setObjectparams('submit_btn_label', rex_i18n::msg('yform_add_table'));
+        $yform->setObjectparams('submit_btn_label', rex_i18n::msg('yform_add'));
         $yform->setValueField('text', ['table_name', rex_i18n::msg('yform_manager_table_name'), rex::getTablePrefix()]);
         $yform->setValidateField('empty', ['table_name', rex_i18n::msg('yform_manager_table_enter_name')]);
         $yform->setValidateField('customfunction', ['table_name', function ($label = '', $table = '', $params = '') {
@@ -110,28 +106,10 @@ if ($func == 'tableset_import' && rex::getUser()->isAdmin()) {
 
     $yform->setValueField('text', ['name', rex_i18n::msg('yform_manager_name')]);
     $yform->setValidateField('empty', ['name', rex_i18n::msg('yform_manager_table_enter_name')]);
-    $yform->setValueField('textarea', ['description', '<br />'.rex_i18n::msg('yform_manager_table_description'), 'attributes' => '{"class":"form-control yform-textarea-short"}']);
 
-    $yform->setValueField('html', ['html' => '</div><div class="col-md-6">']);
-
-    $yform->setValueField('html', ['html' => '<label>'.rex_i18n::msg('yform_manager_table_func').'</label>']);
-
-    $yform->setValueField('checkbox', ['search', rex_i18n::msg('yform_manager_search_active')]);
-    $yform->setValueField('checkbox', ['hidden', rex_i18n::msg('yform_manager_table_hide')]);
-    $yform->setValueField('checkbox', ['add_new', rex_i18n::msg('yform_manager_table_allow_add_new')]);
-    $yform->setValueField('checkbox', ['history', rex_i18n::msg('yform_manager_table_history')]);
-    $yform->setValueField('checkbox', ['schema_overwrite', rex_i18n::msg('yform_manager_table_schema_overwrite'), 'default' => true]);
-
-    $yform->setValueField('html', ['html' => '<label><br />'.rex_i18n::msg('yform_manager_table_user_func').'</label>']);
-
-    $yform->setValueField('checkbox', ['export', rex_i18n::msg('yform_manager_table_allow_export')]);
-    $yform->setValueField('checkbox', ['import', rex_i18n::msg('yform_manager_table_allow_import')]);
-    $yform->setValueField('checkbox', ['mass_deletion', rex_i18n::msg('yform_manager_table_allow_mass_deletion')]);
-    $yform->setValueField('checkbox', ['mass_edit', rex_i18n::msg('yform_manager_table_allow_mass_edit')]);
-
-    $yform->setValueField('html', ['html' => '']);
-
-    $yform->setValueField('text', ['name' => 'list_amount', 'label' => '<br />'.rex_i18n::msg('yform_manager_entries_per_page'), 'prepend' => 'sf','default' => '50']);
+    $yform->setValueField('textarea', ['description', rex_i18n::msg('yform_manager_table_description'), 'css_class' => 'short1']);
+    $yform->setValueField('checkbox', ['status', rex_i18n::msg('yform_tbl_active')]);
+    $yform->setValueField('text', ['list_amount', rex_i18n::msg('yform_manager_entries_per_page'), '50']);
     $yform->setValidateField('type', ['list_amount', 'int', rex_i18n::msg('yform_manager_enter_number')]);
 
     $sortFields = ['id'];
@@ -143,21 +121,21 @@ if ($func == 'tableset_import' && rex::getUser()->isAdmin()) {
             $sortFieldsSql->next();
         }
     }
-
-    $yform->setValueField('html', ['html' => '<br /><div class="row"><div class="col-md-6">']);
-    $yform->setValueField('choice', ['name' => 'list_sortfield', 'label' => rex_i18n::msg('yform_manager_sortfield'), 'choices' => implode(',', $sortFields)]);
-    $yform->setValueField('html', ['html' => '</div><div class="col-md-6">']);
-    $yform->setValueField('choice', ['name' => 'list_sortorder', 'label' => rex_i18n::msg('yform_manager_sortorder'), 'choices' => [
-        'ASC' => rex_i18n::msg('yform_manager_sortorder_asc'),
-        'DESC' => rex_i18n::msg('yform_manager_sortorder_desc'),
+    $yform->setValueField('select', ['list_sortfield', rex_i18n::msg('yform_manager_sortfield'), implode(',', $sortFields)]);
+    $yform->setValueField('select', ['list_sortorder', rex_i18n::msg('yform_manager_sortorder'), [
+    'ASC' => rex_i18n::msg('yform_manager_sortorder_asc'),
+    'DESC' => rex_i18n::msg('yform_manager_sortorder_desc'),
     ]]);
 
-    $yform->setValueField('html', ['html' => '</div></div>']);
+    $yform->setValueField('checkbox', ['search', rex_i18n::msg('yform_manager_search_active')]);
 
-
-
-
-    $yform->setValueField('html', ['html' => '</div></div>']);
+    $yform->setValueField('checkbox', ['hidden', rex_i18n::msg('yform_manager_table_hide')]);
+    $yform->setValueField('checkbox', ['add_new', rex_i18n::msg('yform_manager_table_allow_add_new')]);
+    $yform->setValueField('checkbox', ['export', rex_i18n::msg('yform_manager_table_allow_export')]);
+    $yform->setValueField('checkbox', ['import', rex_i18n::msg('yform_manager_table_allow_import')]);
+    $yform->setValueField('checkbox', ['mass_deletion', rex_i18n::msg('yform_manager_table_allow_mass_deletion')]);
+    $yform->setValueField('checkbox', ['mass_edit', rex_i18n::msg('yform_manager_table_allow_mass_edit')]);
+    $yform->setValueField('checkbox', ['history', rex_i18n::msg('yform_manager_table_history')]);
 
     $form = $yform->getForm();
 
@@ -184,25 +162,31 @@ if ($func == 'tableset_import' && rex::getUser()->isAdmin()) {
         if ($func == 'edit') {
             $table_name = $yform->objparams['value_pool']['email']['table_name'];
             $table = rex_yform_manager_table::get($table_name);
-            if ($table) {
-                rex_yform_manager_table_api::generateTableAndFields($table);
-            }
-            echo rex_view::info(rex_i18n::msg('yform_manager_table_updated'));
 
+            if ($table) {
+                $t = new rex_yform_manager();
+                $t->setTable($table);
+                $t->generateAll();
+            }
+
+            echo rex_view::info(rex_i18n::msg('yform_manager_table_updated'));
         } elseif ($func == 'add') {
             rex_yform_manager_table::deleteCache();
             $table_name = $yform->objparams['value_pool']['sql']['table_name'];
             $table = rex_yform_manager_table::get($table_name);
+
             if ($table) {
-                rex_yform_manager_table_api::generateTableAndFields($table);
+                $t = new rex_yform_manager();
+                $t->setTable($table);
+                $t->generateAll();
                 echo rex_view::success(rex_i18n::msg('yform_manager_table_added'));
             }
-
         }
     }
 }
 
 if ($func == 'delete' && rex::getUser()->isAdmin()) {
+
     if (!rex_csrf_token::factory($_csrf_key)->isValid()) {
         echo rex_view::error(rex_i18n::msg('csrf_token_invalid'));
     } else {
@@ -286,13 +270,14 @@ if ($show_list && rex::getUser()->isAdmin()) {
     $list->removeColumn('mass_deletion');
     $list->removeColumn('mass_edit');
     $list->removeColumn('history');
-    $list->removeColumn('table_name');
 
     $list->setColumnLabel('prio', rex_i18n::msg('yform_manager_table_prio_short'));
+    $list->setColumnLabel('name', rex_i18n::msg('yform_manager_name'));
+    $list->setColumnFormat('name', 'custom', 'rex_yform_list_translate');
 
-    $list->setColumnLabel('name', rex_i18n::msg('yform_manager_name').' / '.rex_i18n::msg('yform_manager_table_name'));
-    $list->setColumnFormat('name', 'custom', function ($params) {
-        return rex_i18n::translate($params['value']).' [###table_name###]<p><a href="index.php?page=yform/manager/data_edit&table_name=###table_name###"><i class="rex-icon rex-icon-edit"></i> '.rex_i18n::msg('yform_edit_datatable').'</a></p>';
+    $list->setColumnLabel('table_name', rex_i18n::msg('yform_manager_table_name'));
+    $list->setColumnFormat('table_name', 'custom', function ($params) {
+        return '<a href="index.php?page=yform/manager/data_edit&table_name=' . $params['value'] . '">' . $params['value'] . '</a>';
     });
 
     $list->setColumnLabel('status', rex_i18n::msg('yform_manager_table_status'));
@@ -301,17 +286,17 @@ if ($show_list && rex::getUser()->isAdmin()) {
     $list->setColumnLabel('hidden', rex_i18n::msg('yform_manager_table_hidden'));
     $list->setColumnFormat('hidden', 'custom', 'rex_yform_hidden_col');
 
-    /*$list->addColumn('features', '<i class="rex-icon rex-icon-edit"></i> ' . rex_i18n::msg('yform_features'));
+    $list->addColumn('features', '<i class="rex-icon rex-icon-edit"></i> ' . rex_i18n::msg('yform_features'));
     $list->setColumnLabel('features', rex_i18n::msg('yform_manager_table_features'));
-    $list->setColumnFormat('features', 'custom', 'rex_yform_features_col');*/
+    $list->setColumnFormat('features', 'custom', 'rex_yform_features_col');
 
-    $list->addColumn(rex_i18n::msg('yform_manager_edit_table'), '<i class="rex-icon rex-icon-edit"></i> ' . rex_i18n::msg('yform_manager_edit_table'));
-    $list->setColumnLabel(rex_i18n::msg('yform_manager_edit_table'), rex_i18n::msg('yform_function'));
-    $list->setColumnLayout(rex_i18n::msg('yform_manager_edit_table'), ['<th class="rex-table-action" colspan="3">###VALUE###</th>', '<td class="rex-table-action">###VALUE###</td>']);
-    $list->setColumnParams(rex_i18n::msg('yform_manager_edit_table'), ['table_id' => '###id###', 'func' => 'edit']);
+    $list->addColumn(rex_i18n::msg('yform_edit'), '<i class="rex-icon rex-icon-edit"></i> ' . rex_i18n::msg('yform_edit'));
+    $list->setColumnLabel(rex_i18n::msg('yform_edit'), rex_i18n::msg('yform_function'));
+    $list->setColumnLayout(rex_i18n::msg('yform_edit'), ['<th class="rex-table-action" colspan="3">###VALUE###</th>', '<td class="rex-table-action">###VALUE###</td>']);
+    $list->setColumnParams(rex_i18n::msg('yform_edit'), ['table_id' => '###id###', 'func' => 'edit']);
 
     $list->addColumn(rex_i18n::msg('yform_delete_definitions'), '<i class="rex-icon rex-icon-delete"></i> ' . rex_i18n::msg('yform_delete_definitions'));
-    $list->setColumnLayout(rex_i18n::msg('yform_delete_definitions'), ['', '<td class="rex-table-action">###VALUE###<p class="help-block"><small>' . rex_i18n::msg('yform_delete_definitions_info') . '</small></p></td>']);
+    $list->setColumnLayout(rex_i18n::msg('yform_delete_definitions'), ['', '<td class="rex-table-action">###VALUE###</td>']);
     $list->setColumnParams(rex_i18n::msg('yform_delete_definitions'), ['table_name' => '###table_name###', 'func' => 'delete'] + rex_csrf_token::factory($_csrf_key)->getUrlParams());
     $list->addLinkAttribute(rex_i18n::msg('yform_delete_definitions'), 'onclick', 'return confirm(\' [###table_name###] ' . rex_i18n::msg('yform_delete_definitions') . ' ?\')');
 

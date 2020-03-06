@@ -11,30 +11,52 @@ class rex_yform_value_checkbox extends rex_yform_value_abstract
 {
     public function enterObject()
     {
-        if ($this->params['send'] == 1 && $this->getValue() != 1) {
-            $this->setValue(0);
-        } elseif ($this->getValue() != '') {
-            $this->setValue(($this->getValue() != 1) ? '0' : '1');
+
+        if (is_array($this->getElement('values'))) {
+            $values = $this->getElement('values');
+            $w = $values[0];
+            $v = $values[1];
+        } else if ($this->getElement('values') == '') {
+            $w = 0;
+            $v = 1;
         } else {
-            $this->setValue($this->getElement('default'));
+            $values = explode(',', $this->getElement('values'));
+            if (count($values) == 1) {
+                $w = '';
+                $v = $values[0];
+            } else {
+                $w = $values[0];
+                $v = $values[1];
+            }
+        }
+        $values = [$w,$v];
+
+        if ($this->params['send'] != 1 && $this->getElement('default') == 1 && !in_array($this->getValue() , $values) ) {
+            $this->setValue($v);
+
+        } elseif ($this->getValue() == $v) {
+            $this->setValue($v);
+
+        } else {
+            $this->setValue($w);
         }
 
         if ($this->needsOutput()) {
-            $this->params['form_output'][$this->getId()] = $this->parse('value.checkbox.tpl.php', ['value' => $this->getValue()]);
+            $this->params['form_output'][$this->getId()] = $this->parse('value.checkbox.tpl.php', ['value' => $v]);
         }
 
         $this->params['value_pool']['email'][$this->getName()] = $this->getValue();
-        if ($this->getElement('no_db') != 'no_db') {
+        if ($this->getElement(5) != 'no_db') {
             $this->params['value_pool']['sql'][$this->getName()] = $this->getValue();
         }
     }
 
     public function getDescription()
     {
-        return 'checkbox|name|label|default clicked (0/1)|[no_db]|[notice]';
+        return 'checkbox|name|label|Values(0,1)|default clicked (0/1)|[no_db]';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -42,36 +64,43 @@ class rex_yform_value_checkbox extends rex_yform_value_abstract
             'values' => [
                 'name' => ['type' => 'name', 'label' => rex_i18n::msg('yform_values_defaults_name')],
                 'label' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_defaults_label')],
-                'default' => ['type' => 'checkbox', 'label' => rex_i18n::msg('yform_values_checkbox_default'), 'default' => 0],
+                'values' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_checkbox_values'), 'default' => '0,1'],
+                'default' => ['type' => 'boolean', 'label' => rex_i18n::msg('yform_values_checkbox_default'), 'default' => 0, 'values' => '0,1'],
                 'no_db' => ['type' => 'no_db', 'label' => rex_i18n::msg('yform_values_defaults_table'), 'default' => 0],
-                'attributes' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_defaults_attributes'), 'notice' => rex_i18n::msg('yform_values_defaults_attributes_notice')],
-                'notice' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_defaults_notice')],
+                'notice' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_checkbox_description'),
-            'db_type' => ['tinyint(1)'],
+            'dbtype' => 'varchar(255)',
             'famous' => true,
-            'hooks' => [
-                'preDefault' => function (rex_yform_manager_field $field) {
-                    return ($field->getElement('default') == 1) ? '1' : '0';
-                },
-            ],
         ];
     }
 
     public static function getSearchField($params)
     {
-        $v = 1;
-        $w = 0;
+        if ($params['field']->getElement('values') == '') {
+            $v = 1; // gecheckt
+            $w = 0; // nicht gecheckt
+        } else {
+            $values = explode(',', $params['field']->getElement('values'));
+
+            if (count($values) == 1) {
+                $v = $values[0];
+                $w = '';
+            } else {
+                $v = $values[1];
+                $w = $values[0];
+            }
+        }
 
         $options = [];
         $options[$v] = 'checked';
         $options[$w] = 'not checked';
         $options[''] = '---';
 
-        $params['searchForm']->setValueField('choice', [
+        $params['searchForm']->setValueField('select', [
             'name' => $params['field']->getName(),
             'label' => $params['field']->getLabel(),
-            'choices' => $options,
+            'options' => $options,
         ]);
     }
 

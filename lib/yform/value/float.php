@@ -32,7 +32,7 @@ class rex_yform_value_float extends rex_yform_value_abstract
         return 'float|name|label|scale|defaultwert|[no_db]';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -43,12 +43,10 @@ class rex_yform_value_float extends rex_yform_value_abstract
                 'scale' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_float_scale')],
                 'default' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_float_default')],
                 'no_db' => ['type' => 'no_db',   'label' => rex_i18n::msg('yform_values_defaults_table'),  'default' => 0],
-                'attributes' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_attributes'), 'notice' => rex_i18n::msg('yform_values_defaults_attributes_notice')],
                 'notice' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_float_description'),
-            'deprecated' => rex_i18n::msg('yform_values_deprecated_float'),
-            'db_type' => ['varchar(191)'],
+            'dbtype' => 'varchar(255)',
         ];
     }
 
@@ -88,10 +86,4 @@ class rex_yform_value_float extends rex_yform_value_abstract
     {
         return number_format((float) strtr($value, ',', '.'), (int) $scale, '.', '');
     }
-
-    public function isDeprecated()
-    {
-        return true;
-    }
-
 }

@@ -11,56 +11,52 @@ class rex_yform_validate_compare_value extends rex_yform_validate_abstract
 {
     public function enterObject()
     {
-        $compare_type = $this->getElement('compare_type');
-        $compare_value = $this->getElement('compare_value');
+        if ($this->params['send'] == '1') {
+            $compare_type = $this->getElement('compare_type');
+            $compare_value = $this->getElement('compare_value');
 
-        $Object = $this->getValueObject($this->getElement('name'));
+            $Object = $this->getValueObject($this->getElement('name'));
+            $field_value = $Object->getValue();
 
-        if (!$this->isObject($Object)) {
-            return;
+            $error = false;
+            switch ($compare_type) {
+                case '<=':
+                    if ($field_value <= $compare_value) {
+                        $error = true;
+                    }
+                    break;
+                case '>=':
+                    if ($field_value >= $compare_value) {
+                        $error = true;
+                    }
+                    break;
+                case '>':
+                    if ($field_value > $compare_value) {
+                        $error = true;
+                    }
+                    break;
+                case '<':
+                    if ($field_value < $compare_value) {
+                        $error = true;
+                    }
+                    break;
+                case '==':
+                    if ($field_value == $compare_value) {
+                        $error = true;
+                    }
+                    break;
+                case '!=':
+                default:
+                    if ($field_value != $compare_value) {
+                        $error = true;
+                    }
+            }
+
+            if ($error) {
+                $this->params['warning'][$Object->getId()] = $this->params['error_class'];
+                $this->params['warning_messages'][$Object->getId()] = $this->getElement('message');
+            }
         }
-
-        $field_value = $Object->getValue();
-
-        $error = false;
-        switch ($compare_type) {
-            case '<=':
-                if ($field_value <= $compare_value) {
-                    $error = true;
-                }
-                break;
-            case '>=':
-                if ($field_value >= $compare_value) {
-                    $error = true;
-                }
-                break;
-            case '>':
-                if ($field_value > $compare_value) {
-                    $error = true;
-                }
-                break;
-            case '<':
-                if ($field_value < $compare_value) {
-                    $error = true;
-                }
-                break;
-            case '==':
-                if ($field_value == $compare_value) {
-                    $error = true;
-                }
-                break;
-            case '!=':
-            default:
-                if ($field_value != $compare_value) {
-                    $error = true;
-                }
-        }
-
-        if ($error) {
-            $this->params['warning'][$Object->getId()] = $this->params['error_class'];
-            $this->params['warning_messages'][$Object->getId()] = $this->getElement('message');
-        }
-
     }
 
     public function getDescription()
@@ -68,7 +64,7 @@ class rex_yform_validate_compare_value extends rex_yform_validate_abstract
         return 'validate|compare_value|name|value|[!=/</>/==/>=/<=]|warning_message ';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'validate',
@@ -76,7 +72,7 @@ class rex_yform_validate_compare_value extends rex_yform_validate_abstract
             'values' => [
                 'name' => ['type' => 'select_name', 'label' => rex_i18n::msg('yform_validate_compare_value_name')],
                 'compare_value' => ['type' => 'text', 'label' => rex_i18n::msg('yform_validate_compare_value_compare_value')],
-                'compare_type' => ['type' => 'choice', 'label' => rex_i18n::msg('yform_validate_compare_value_compare_type'), 'choices' => ['!=','<','>','==','>=','<='], 'default' => '!='],
+                'compare_type' => ['type' => 'select', 'label' => rex_i18n::msg('yform_validate_compare_value_compare_type'), 'options' => '!\=,<,>,\=\=,>\=,<\=', 'default' => '!\='],
                 'message' => ['type' => 'text',        'label' => rex_i18n::msg('yform_validate_compare_value_message')],
             ],
             'description' => rex_i18n::msg('yform_validate_compare_value_description'),

@@ -76,7 +76,7 @@ class rex_yform_value_submit extends rex_yform_value_abstract
         return 'submit|name|labelvalue1_on_button1,labelvalue2_on_button2 | [value_1_to_save_if_clicked,value_2_to_save_if_clicked] | [no_db] | [Default-Wert] | [cssclassname1,cssclassname2]';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
                 'type' => 'value',
@@ -91,7 +91,7 @@ class rex_yform_value_submit extends rex_yform_value_abstract
                 ],
             ],
             'description' => rex_i18n::msg('yform_values_submit_description'),
-            'db_type' => ['text'],
+            'dbtype' => 'text',
             'is_searchable' => false,
             'is_hiddeninlist' => true,
         ];

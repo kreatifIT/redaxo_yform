@@ -57,7 +57,7 @@ class rex_yform_value_fieldset extends rex_yform_value_abstract
         return 'fieldset|name|label|[class]|[onlyclose/onlycloseall/onlyopen/closeandopen]';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -67,7 +67,7 @@ class rex_yform_value_fieldset extends rex_yform_value_abstract
                 'label' => ['type' => 'text',  'label' => rex_i18n::msg('yform_values_defaults_label')],
             ],
             'description' => rex_i18n::msg('yform_values_fieldset_description'),
-            'db_type' => ['none'],
+            'dbtype' => 'none',
             'is_searchable' => false,
             'is_hiddeninlist' => true,
             'multi_edit' => 'always',

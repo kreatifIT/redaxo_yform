@@ -11,21 +11,19 @@ class rex_yform_validate_intfromto extends rex_yform_validate_abstract
 {
     public function enterObject()
     {
-        $from = (int) $this->getElement('from');
-        $to = (int) $this->getElement('to');
+        if ($this->params['send'] == '1') {
+            $from = (int) $this->getElement('from');
+            $to = (int) $this->getElement('to');
 
-        $Object = $this->getValueObject();
+            $Object = $this->getValueObject();
 
-        if (!$this->isObject($Object)) {
-            return;
-        }
+            $value = $Object->getValue();
+            $value_int = (int) $value;
 
-        $value = $Object->getValue();
-        $value_int = (int) $value;
-
-        if ("$value" != "$value_int" || $value_int < $from || $value_int > $to) {
-            $this->params['warning'][$Object->getId()] = $this->params['error_class'];
-            $this->params['warning_messages'][$Object->getId()] = $this->getElement('message');
+            if ("$value" != "$value_int" || $value_int < $from || $value_int > $to) {
+                $this->params['warning'][$Object->getId()] = $this->params['error_class'];
+                $this->params['warning_messages'][$Object->getId()] = $this->getElement('message');
+            }
         }
     }
 
@@ -34,7 +32,7 @@ class rex_yform_validate_intfromto extends rex_yform_validate_abstract
         return 'validate|intfromto|name|from|to|warning_message';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'validate',

@@ -100,7 +100,7 @@ class rex_yform_value_captcha_calc extends rex_yform_value_abstract
     {
         extract($this->captcha_ini);
 
-        $font_path = rex_addon::get('yform')->getPath('data/fonts');
+        $font_path = rex_addon::get('yform')->getDataPath('fonts');
 
         list($padding_top, $padding_right, $padding_bottom, $padding_left) = $this->captcha_split($padding);
         $box_width = ($width - ($padding_left + $padding_right)) / count($this->captcha_letters);
@@ -215,10 +215,4 @@ fg_color_4          = 255,221,0';
         $string = md5($string);
         $_SESSION['captcha_calc'] = $string;
     }
-
-    public function isDeprecated()
-    {
-        return true;
-    }
-
 }

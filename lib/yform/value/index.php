@@ -15,54 +15,45 @@ class rex_yform_value_index extends rex_yform_value_abstract
             return;
         }
 
-        $value = $this->getValue();
-        if (!$value) {
-            $value = "";
+        $index_labels = explode(',', $this->getElement('names'));
+
+        $value = '';
+        $relations = [];
+
+        foreach ($index_labels as $name) {
+            $name = trim($name);
+
+            if ($name == 'id' && $this->params['main_id'] > 0) {
+                $value .= $this->params['main_id'];
+            }
+
+            if (isset($this->params['value_pool']['sql'][$name])) {
+                $value .= ' '.$this->params['value_pool']['sql'][$name];
+                continue;
+            }
+
+            $name = explode('.', $name);
+            if (count($name) > 1) {
+                $this->addRelation($relations, $name);
+            }
         }
 
-        if ($this->getElement('names') != "") {
-
-            $index_labels = explode(',', $this->getElement('names'));
-
-            $value = '';
-            $relations = [];
-
-            foreach ($index_labels as $name) {
-                $name = trim($name);
-
-                if ($name == 'id' && $this->params['main_id'] > 0) {
-                    $value .= $this->params['main_id'];
-                }
-
-                if (isset($this->params['value_pool']['sql'][$name])) {
-                    $value .= ' '.$this->params['value_pool']['sql'][$name];
-                    continue;
-                }
-
-                $name = explode('.', $name);
-                if (count($name) > 1) {
-                    $this->addRelation($relations, $name);
-                }
+        if ($relations) {
+            foreach ($this->getRelationValues($relations) as $v) {
+                $value .= ' '.$v;
             }
+        }
 
-            if ($relations) {
-                foreach ($this->getRelationValues($relations) as $v) {
-                    $value .= ' '.$v;
-                }
-            }
-
-            $fnc = trim($this->getElement('function'));
-            if (function_exists($fnc)) {
-                $value = call_user_func($fnc, $value);
-            }
-
+        $fnc = trim($this->getElement('function'));
+        if (function_exists($fnc)) {
+            $value = call_user_func($fnc, $value);
         }
 
         $this->setValue($value);
 
-        $this->params['value_pool']['email'][$this->getName()] = $this->getValue();;
+        $this->params['value_pool']['email'][$this->getName()] = $value;
         if ($this->getElement('no_db') != 'no_db') {
-            $this->params['value_pool']['sql'][$this->getName()] = $this->getValue();;
+            $this->params['value_pool']['sql'][$this->getName()] = $value;
         }
     }
 
@@ -71,7 +62,7 @@ class rex_yform_value_index extends rex_yform_value_abstract
         return 'index|name|label|name1,name2,name3|[no_db]|[func/md5/sha]';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -84,7 +75,8 @@ class rex_yform_value_index extends rex_yform_value_abstract
                 'function' => ['type' => 'text',  'label' => rex_i18n::msg('yform_values_index_function'), 'notice' => rex_i18n::msg('yform_values_index_function_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_index_description'),
-            'db_type' => ['mediumtext', 'varchar(191)'], // text (65kb) mediumtext (16Mb)
+            'is_hiddeninlist' => true,
+            'dbtype' => 'text',
             'multi_edit' => false,
         ];
     }
@@ -113,7 +105,7 @@ class rex_yform_value_index extends rex_yform_value_abstract
         foreach ($relations as $name => $sub) {
             $relation = $table->getRelation($name);
 
-            if (!$relation || (4 != $relation->getElement('type') && 5 != $relation->getElement('type'))  && !$relation->getElement('relation_table') && empty($this->params['value_pool']['sql'][$name])) {
+            if (!$relation || 4 != $relation->getElement('type') && !$relation->getElement('relation_table') && empty($this->params['value_pool']['sql'][$name])) {
                 continue;
             }
 
@@ -132,7 +124,6 @@ class rex_yform_value_index extends rex_yform_value_abstract
                         $format = 'LEFT JOIN %s t%d ON FIND_IN_SET(t%2$d.id, t%d.%s)';
                         break;
                     case 4:
-                    case 5:
                         $format = 'LEFT JOIN %s t%d ON t%2$d.%4$s = t%d.id';
                         break;
                     default:
@@ -155,7 +146,7 @@ class rex_yform_value_index extends rex_yform_value_abstract
                 $table = rex_yform_manager_table::get($relation->getElement('table'));
 
                 $fieldFormat = 't%d.%s';
-                if ($relation->getElement('relation_table') || in_array($relation->getElement('type'), [1, 3, 4, 5])) {
+                if ($relation->getElement('relation_table') || in_array($relation->getElement('type'), [1, 3, 4])) {
                     $fieldFormat = 'GROUP_CONCAT('.$fieldFormat.' SEPARATOR " ")';
                 }
 
@@ -188,7 +179,7 @@ class rex_yform_value_index extends rex_yform_value_abstract
                         $currentIndex = $addJoin($relationTable->getTableName(), $currentIndex, $columns['source'], 4);
                     }
 
-                    if (4 == $relation->getElement('type') || 5 == $relation->getElement('type')) {
+                    if (4 == $relation->getElement('type')) {
                         $name = $relation->getElement('field');
                     }
 
@@ -243,7 +234,6 @@ class rex_yform_value_index extends rex_yform_value_abstract
                     $query .= sprintf('FIND_IN_SET(t0.id, %s)', $sql->escape($this->params['value_pool']['sql'][$name]));
                     break;
                 case 4:
-                case 5:
                     $query .= sprintf('t0.%s = %d', $sql->escapeIdentifier($relation->getElement('field')), $this->params['main_id']);
                     break;
                 default:

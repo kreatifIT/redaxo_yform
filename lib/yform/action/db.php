@@ -19,8 +19,6 @@ class rex_yform_action_db extends rex_yform_action_abstract
             $main_table = $this->params['main_table'];
         }
 
-        $main_table = str_replace('%TABLE_PREFIX%', rex::getTablePrefix(), $main_table);
-
         if ($main_table == '') {
             $this->params['form_show'] = true;
             $this->params['hasWarnings'] = true;

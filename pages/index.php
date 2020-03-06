@@ -1,3 +1,3 @@
 <?php
 
-rex_be_controller::includeCurrentPageSubPath();
+include rex_be_controller::getCurrentPageObject()->getSubPath();

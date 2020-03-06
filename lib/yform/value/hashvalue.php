@@ -37,7 +37,7 @@ class rex_yform_value_hashvalue extends rex_yform_value_abstract
         return 'hashvalue|name|[label]|field|(md5/sha1/sha512/...)|[salt]|[no_db]';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -51,7 +51,7 @@ class rex_yform_value_hashvalue extends rex_yform_value_abstract
                 'no_db' => ['type' => 'no_db',  'label' => rex_i18n::msg('yform_values_defaults_table')],
             ],
             'description' => rex_i18n::msg('yform_values_hashvalue_description'),
-            'db_type' => ['text', 'varchar(191)'],
+            'dbtype' => 'text',
             'multi_edit' => false,
         ];
     }

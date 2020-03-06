@@ -9,9 +9,7 @@
 
 class rex_yform_value_datetime extends rex_yform_value_abstract
 {
-    const
-        VALUE_DATETIME_DEFAULT = 'YYYY-MM-DD HH:ii:ss',
-        VALUE_DATETIME_FORMATS = ['YYYY-MM-DD HH:ii:ss' => 'YYYY-MM-DD HH:ii:ss'];
+    const VALUE_DATETIME_DEFAULT = 'YYYY/MM/DD HH:ii:ss';
 
     public function preValidateAction()
     {
@@ -215,10 +213,10 @@ class rex_yform_value_datetime extends rex_yform_value_abstract
 
     public function getDescription()
     {
-        return 'datetime|name|label| jahrstart | jahrsende | minutenformate 00,15,30,45 | [Anzeigeformat YYYY-MM-DD HH:ii:ss] |[1/Aktuelles Datum voreingestellt]|[no_db]';
+        return 'datetime|name|label| jahrstart | jahrsende | minutenformate 00,15,30,45 | [Anzeigeformat YYYY/MM/DD HH:ii:ss] |[1/Aktuelles Datum voreingestellt]|[no_db]';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -229,15 +227,15 @@ class rex_yform_value_datetime extends rex_yform_value_abstract
                 'year_start' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_datetime_year_start')],
                 'year_end' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_datetime_year_end')],
                 'minutes' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_datetime_minutes')],
-                'format' => ['type' => 'choice', 'label' => rex_i18n::msg('yform_values_datetime_format'), 'choices' => self::VALUE_DATETIME_FORMATS, 'default' => self::VALUE_DATETIME_DEFAULT],
+                'format' => ['type' => 'text', 'label' => rex_i18n::msg('yform_values_datetime_format'), 'notice' => rex_i18n::msg('yform_values_datetime_format_notice')],
                 'current_date' => ['type' => 'boolean', 'label' => rex_i18n::msg('yform_values_datetime_current_date')],
                 'no_db' => ['type' => 'no_db', 'label' => rex_i18n::msg('yform_values_defaults_table'),  'default' => 0],
-                'widget' => ['type' => 'choice', 'label' => rex_i18n::msg('yform_values_defaults_widgets'), 'choices' => ['select' => 'select', 'input:text' => 'input:text'], 'default' => 'select'],
+                'widget' => ['type' => 'select', 'label' => rex_i18n::msg('yform_values_defaults_widgets'), 'options' => ['select' => 'select', 'input:text' => 'input:text'], 'default' => 'select'],
                 'attributes' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_attributes'), 'notice' => rex_i18n::msg('yform_values_defaults_attributes_notice')],
                 'notice' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_notice')],
             ],
             'description' => 'Datum & Uhrzeit Eingabe',
-            'db_type' => ['datetime'],
+            'dbtype' => 'datetime',
         ];
     }
 

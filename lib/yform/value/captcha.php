@@ -9,7 +9,7 @@
 
 class rex_yform_value_captcha extends rex_yform_value_abstract
 {
-    public function postValidateAction()
+    public function enterObject()
     {
         rex_login::startSession();
 
@@ -27,19 +27,11 @@ class rex_yform_value_captcha extends rex_yform_value_abstract
         if ($this->params['send'] == 1 && $_SESSION['captcha'] != '' && md5(mb_strtolower($this->getValue())) == $_SESSION['captcha']) {
             $_SESSION['captcha'] = '';
         } elseif ($this->params['send'] == 1) {
-            if ($this->getElement(4) == 1) {
-                $this->params['warning'] = [];
-                $this->params['warning_messages'] = [];
-            };
-
+            // Error. Fehlermeldung ausgeben
             $this->params['warning'][$this->getId()] = $this->params['error_class'];
             $this->params['warning_messages'][$this->getId()] = $this->getElement(2);
         }
-    }
 
-
-    public function enterObject()
-    {
         if (!$this->needsOutput()) {
             return;
         }
@@ -64,7 +56,7 @@ class rex_yform_value_captcha extends rex_yform_value_abstract
 
     public function getDescription()
     {
-        return 'captcha|Beschreibungstext|Fehlertext|[link]|hide_warnings[0/1]';
+        return 'captcha|Beschreibungstext|Fehlertext|[link]';
     }
 
     public function captcha_showImage()
@@ -108,7 +100,7 @@ class rex_yform_value_captcha extends rex_yform_value_abstract
     {
         extract($this->captcha_ini);
 
-        $font_path = rex_addon::get('yform')->getPath('data/fonts');
+        $font_path = rex_addon::get('yform')->getDataPath('fonts');
 
         list($padding_top, $padding_right, $padding_bottom, $padding_left) = $this->captcha_split($padding);
         $box_width = ($width - ($padding_left + $padding_right)) / $letters_no;
@@ -223,10 +215,4 @@ fg_color_4          = 255,221,0';
         $string = md5($string);
         $_SESSION['captcha'] = $string;
     }
-
-    public function isDeprecated()
-    {
-        return true;
-    }
-
 }

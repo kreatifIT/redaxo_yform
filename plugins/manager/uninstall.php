@@ -7,11 +7,8 @@
  * @author <a href="http://www.yakamara.de">www.yakamara.de</a>
  */
 
-rex_sql_table::get(rex::getTable('yform_table'))
-    ->drop();
-rex_sql_table::get(rex::getTable('yform_field'))
-    ->drop();
-rex_sql_table::get(rex::getTable('yform_history'))
-    ->drop();
-rex_sql_table::get(rex::getTable('yform_history_field'))
-    ->drop();
+$sql = rex_sql::factory();
+$sql->setQuery('DROP TABLE IF EXISTS `' . rex::getTablePrefix() . 'yform_table`;');
+$sql->setQuery('DROP TABLE IF EXISTS `' . rex::getTablePrefix() . 'yform_field`;');
+$sql->setQuery('DROP TABLE IF EXISTS `' . rex::getTablePrefix() . 'yform_history`;');
+$sql->setQuery('DROP TABLE IF EXISTS `' . rex::getTablePrefix() . 'yform_history_field`;');

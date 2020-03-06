@@ -105,7 +105,7 @@ class rex_yform_value_select_sql extends rex_yform_value_abstract
         return 'select_sql|name|label| select id,name from table order by name | [defaultvalue] | [no_db] |1/0 Leeroption|Leeroptionstext|1/0 Multiple Feld|selectsize';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -124,8 +124,7 @@ class rex_yform_value_select_sql extends rex_yform_value_abstract
                 'notice' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_select_sql_description'),
-            'db_type' => ['text'],
-            'deprecated' => rex_i18n::msg('yform_values_deprecated_select_sql'),
+            'dbtype' => 'text',
         ];
     }
 
@@ -230,10 +229,4 @@ class rex_yform_value_select_sql extends rex_yform_value_abstract
             return ' ( ' . implode(' or ', $where) . ' )';
         }
     }
-
-    public function isDeprecated()
-    {
-        return true;
-    }
-
 }

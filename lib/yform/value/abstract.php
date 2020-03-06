@@ -46,12 +46,7 @@ abstract class rex_yform_value_abstract extends rex_yform_base_abstract
 
     public function getFieldName($k = '')
     {
-        $params = [];
-        $params[] = $this->getId();
-        if ($k != '') {
-            $params[] = $k;
-        }
-        return $this->params['this']->getFieldName($this->getName(), $params);
+        return $this->params['this']->getFieldName($this->getId(), $k, $this->getName());
     }
 
     public function getHTMLId($suffix = '')
@@ -251,46 +246,6 @@ abstract class rex_yform_value_abstract extends rex_yform_base_abstract
             return $this->params['rex_yform_set'][$key];
         }
         return null;
-    }
-
-    public function getDatabaseFieldTypes()
-    {
-        $definitions = $this->getDefinitions();
-        $db_types = [];
-
-        // deprecated
-        if (isset($definitions['dbtype'])) {
-            $definitions['db_type'] = [$definitions['dbtype']];
-        }
-
-        if (!isset($definitions['db_type'])) {
-            $definitions['db_type'] = [];
-        } elseif (!is_array($definitions['db_type'])) {
-            $definitions['db_type'] = [$definitions['db_type']];
-        }
-        foreach ($definitions['db_type'] as $db_type) {
-            $db_types[$db_type] = $db_type;
-        }
-        return $db_types;
-    }
-
-    public function getDatabaseFieldDefaultType()
-    {
-        $db_types = $this->getDatabaseFieldTypes();
-        reset($db_types);
-        return key($db_types);
-    }
-
-    public function getDatabaseFieldNull()
-    {
-        $definitions = $this->getDefinitions();
-        return (isset($definitions['db_null']) && $definitions['db_null']) ? true : false;
-    }
-
-    public function getDatabaseFieldDefault()
-    {
-        $definitions = $this->getDefinitions();
-        return (isset($definitions['default']) && $definitions['default']) ? $definitions['default'] : null;
     }
 
     // ------------ Trigger

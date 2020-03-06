@@ -16,7 +16,7 @@ class rex_yform_value_be_media_category extends rex_yform_value_abstract
         }
 
         $this->params['value_pool']['email'][$this->getName()] = $this->getValue();
-        if ($this->getElement('no_db') != 'no_db') {
+        if ($this->getElement(4) != 'no_db') {
             $this->params['value_pool']['sql'][$this->getName()] = $this->getValue();
         }
 
@@ -93,7 +93,7 @@ class rex_yform_value_be_media_category extends rex_yform_value_abstract
         $this->setValue(implode(',', $this->getValue()));
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -114,7 +114,7 @@ class rex_yform_value_be_media_category extends rex_yform_value_abstract
             ],
             'description' => rex_i18n::msg('yform_values_be_select_category_description'),
             'formbuilder' => false,
-            'db_type' => ['text'],
+            'dbtype' => 'text',
         ];
     }
 

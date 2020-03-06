@@ -56,10 +56,10 @@ class rex_yform_value_google_geocode extends rex_yform_value_abstract
 
     public function getDescription()
     {
-        return 'google_geocode|name|label|[street,zip,city]|width|height|googleapikey|zoom[1,5,10,15,20]|default';
+        return 'google_geocode|name|label|pos_lat,pos_lng|[street,zip,city]|width|height|';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -78,7 +78,7 @@ class rex_yform_value_google_geocode extends rex_yform_value_abstract
 
             ],
             'description' => 'GoogeMap Positionierung',
-            'db_type' => ['text'],
+            'dbtype' => 'text',
             'formbuilder' => false,
             'multi_edit' => false,
         ];

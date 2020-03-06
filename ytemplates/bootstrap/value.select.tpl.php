@@ -17,6 +17,21 @@ $class = $this->getElement('required') ? 'form-is-required ' : '';
 $class_group = trim('form-group ' . $class . $this->getWarningClass());
 
 $class_label[] = 'control-label';
+$field_before = '';
+$field_after = '';
+
+if (trim($this->getElement('grid')) != '') {
+    $grid = explode(',', trim($this->getElement('grid')));
+
+    if (isset($grid[0]) && $grid[0] != '') {
+        $class_label[] = trim($grid[0]);
+    }
+
+    if (isset($grid[1]) && $grid[1] != '') {
+        $field_before = '<div class="' . trim($grid[1]) . '">';
+        $field_after = '</div>';
+    }
+}
 
 $attributes = [];
 $attributes['class'] = 'form-control';
@@ -36,6 +51,7 @@ $attributes = $this->getAttributeElements($attributes, ['autocomplete', 'pattern
 echo '
 <div class="'.$class_group.'" id="'.$this->getHTMLId().'">
     <label class="'.implode(' ', $class_label).'" for="'.$this->getFieldId().'">'.$this->getLabel().'</label>
+    '.$field_before.'
     <select '.implode(' ', $attributes).'>';
     foreach ($options as $key => $value):
         echo '<option value="'.htmlspecialchars($key).'" ';
@@ -48,5 +64,5 @@ echo '
         endforeach;
 echo '
     </select>
-    ' . $notice . '
+    '.$notice . $field_after.'
 </div>';

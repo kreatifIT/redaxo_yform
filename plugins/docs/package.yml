@@ -1,9 +1,8 @@
 package: yform/docs
-version: '3.0-dev'
+version: '2.3'
 author: 'YForm Document Team'
 supportpage: 'https://github.com/yakamara/redaxo_yform_docs'
 
 page:
     title: 'translate:yform_docs'
     perm: admin
-    itemclass: pull-right 

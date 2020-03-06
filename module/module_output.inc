@@ -8,7 +8,7 @@
  */
 
 // module:yform_basic_output
-// v1.1
+// v1.0.1
 //--------------------------------------------------------------------------------
 
 $yform = new rex_yform();
@@ -25,6 +25,8 @@ if ('REX_VALUE[id=6]' != '') {
     $html = '0'; // plaintext
     if ('REX_VALUE[11]' == 1) {
         $html = '1'; // html
+    } elseif ('REX_VALUE[11]' == 2) {
+        $html = '2'; // textile
     }
 
     $e3 = '';

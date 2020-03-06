@@ -27,7 +27,7 @@ class rex_yform_value_showvalue extends rex_yform_value_abstract
         return 'showvalue|name|label|defaultwert|notice';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -39,7 +39,7 @@ class rex_yform_value_showvalue extends rex_yform_value_abstract
                 'notice' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_showvalue_description'),
-            'db_type' => ['text'],
+            'dbtype' => 'text',
         ];
     }
 }

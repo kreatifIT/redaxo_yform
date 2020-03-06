@@ -143,9 +143,9 @@ class rex_yform_value_time extends rex_yform_value_abstract
             $seconds[$i] = str_pad($i, 2, '0', STR_PAD_LEFT);
         }
 
-        $hour = (int) substr($this->getValue(), 0, 2);
-        $minute = (int) substr($this->getValue(), 3, 2);
-        $second = (int) substr($this->getValue(), 6, 2);
+        $hour = (int) substr($this->getValue(), 11, 2);
+        $minute = (int) substr($this->getValue(), 14, 2);
+        $second = (int) substr($this->getValue(), 17, 2);
 
         $input_value = self::time_convertIsoTimeToFormat($this->getValue(), $format);
 
@@ -164,7 +164,7 @@ class rex_yform_value_time extends rex_yform_value_abstract
         return 'time|name|label|[stundenraster 0,1,2,3,4,5]|[minutenraster 00,15,30,45]|';
     }
 
-    public function getDefinitions($values = [])
+    public function getDefinitions()
     {
         return [
             'type' => 'value',
@@ -176,11 +176,11 @@ class rex_yform_value_time extends rex_yform_value_abstract
                 'minutes' => ['type' => 'text',   'label' => rex_i18n::msg('yform_values_time_minutes')],
                 'format' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_time_format'), 'notice' => rex_i18n::msg('yform_values_time_format_notice')],
                 'no_db' => ['type' => 'no_db',   'label' => rex_i18n::msg('yform_values_defaults_table'),  'default' => 0],
-                'widget' => ['type' => 'choice',    'label' => rex_i18n::msg('yform_values_defaults_widgets'), 'choices' => ['select' => 'select', 'input:text' => 'input:text'], 'default' => 'select'],
+                'widget' => ['type' => 'select',    'label' => rex_i18n::msg('yform_values_defaults_widgets'), 'options' => ['select' => 'select', 'input:text' => 'input:text'], 'default' => 'select'],
                 'attributes' => ['type' => 'text',    'label' => rex_i18n::msg('yform_values_defaults_attributes'), 'notice' => rex_i18n::msg('yform_values_defaults_attributes_notice')],
             ],
             'description' => rex_i18n::msg('yform_values_time_description'),
-            'db_type' => ['time'],
+            'dbtype' => 'time',
         ];
     }
 
