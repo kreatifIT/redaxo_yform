@@ -704,7 +704,7 @@ class rex_yform_manager_dataset
         return self::$internalForms[$this->table] = $yform;
     }
 
-    private function createForm()
+    protected function createForm()
     {
         $yform = new rex_yform();
         $fields = $this->getFields();
@@ -739,7 +739,7 @@ class rex_yform_manager_dataset
         return $yform;
     }
 
-    private function setFormMainId(rex_yform $yform)
+    protected function setFormMainId(rex_yform $yform)
     {
         if ($this->exists()) {
             $where = 'id = ' . (int) $this->id;
