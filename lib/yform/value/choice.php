@@ -65,6 +65,7 @@ class rex_yform_value_choice extends rex_yform_value_abstract
                 ];
                 if ($choiceList->isMultiple()) {
                     $choiceAttributes['name'] .= '[]';
+                    $choiceAttributes['class'] = 'custom-control-input';
                     $choiceAttributes['type'] = 'checkbox';
                 }
             } else {
