@@ -45,6 +45,7 @@ class rex_yform_value_be_manager_relation extends rex_yform_value_abstract
         // ---------- Value angleichen -> immer Array mit IDs daraus machen
         if (!is_array($this->getValue())) {
             if ($this->getElement('relation_table') && (!$this->params['send'] || null === $this->getValue())) {
+                // kreatif: wegen dieser Zeile kann ein Feld nicht vollständig geleert werden - sollte yakamara fixen
                 $this->setValue($this->getRelationTableValues());
             } elseif ('' == trim($this->getValue())) {
                 $this->setValue([]);
@@ -596,6 +597,8 @@ class rex_yform_value_be_manager_relation extends rex_yform_value_abstract
                 $sql->insert();
             }
         }
+
+
         $sql->flushValues();
         $sql->setTable($relationTable);
         $sql->setWhere(' ' . $sql->escapeIdentifier($relationTableField['source']) . ' =' . $source_id . ' AND ' . (empty($values) ?: $sql->escapeIdentifier($relationTableField['target']) . ' NOT IN (' . implode(',', $values) . ')'));
