@@ -62,10 +62,10 @@ class rex_yform_value_choice extends rex_yform_value_abstract
                     'id' => $this->getFieldId(),
                     'name' => $this->getFieldName(),
                     'type' => 'radio',
+                    'class' => 'custom-control-input',
                 ];
                 if ($choiceList->isMultiple()) {
                     $choiceAttributes['name'] .= '[]';
-                    $choiceAttributes['class'] = 'custom-control-input';
                     $choiceAttributes['type'] = 'checkbox';
                 }
             } else {
