@@ -20,7 +20,7 @@ class rex_yform_validate_compare_value extends rex_yform_validate_abstract
             return;
         }
 
-        $field_value = (float)$Object->getValue();
+        $field_value = (float)str_replace(',', '.', $Object->getValue());
 
         $error = false;
         switch ($compare_type) {
