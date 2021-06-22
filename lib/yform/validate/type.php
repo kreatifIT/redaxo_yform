@@ -64,6 +64,10 @@ class rex_yform_validate_type extends rex_yform_validate_abstract
                 break;
             case 'date':
                 $w = true;
+                // kreatif: empty date ignoring added
+                if (1 == $this->getElement('not_required') && '0000-00-00' == $Object->getValue()) {
+                    return;
+                }
                 if (preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $Object->getValue(), $matches)) {
                     if (checkdate($matches[2], $matches[3], $matches[1])) {
                         $w = false;
